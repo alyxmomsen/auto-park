@@ -2,12 +2,18 @@
 
 import Catalogue from "@/components/catalogue";
 import Filter from "@/components/filter";
+import store from "@/store";
 import {
+  ActionCreator,
   ActionType,
   iCatalogue,
   iFilter,
   iTarifModel,
-  tBrands,
+  ReducerAction,
+  SetBrandAction,
+  SetModelAction,
+  SetTarifAction,
+  tBrand,
   tFilterDispatch,
   tTarif,
   tTarifCode,
@@ -16,6 +22,7 @@ import {
 import axios from "axios";
 import { redirect } from "next/navigation";
 import React, { createContext, useEffect, useReducer, useState } from "react";
+import { Provider } from "react-redux";
 
 const initialState: iFilter = {
   brands: {
@@ -31,21 +38,17 @@ const initialState: iFilter = {
   tarif: {
     name: "Тариф",
     type: "tarif",
-    tarifCode: null,
-    tarifName:null, 
     value: null,
   },
 };
 
-
-
 export const catalogueContext = createContext<{
   catalogue: iCatalogue | null;
   filter: iFilter;
-  filterDispatch: tFilterDispatch | null;
+  filterDispatch: React.Dispatch<ReducerAction<ActionCreator>> | null;
 }>({ catalogue: null, filter: initialState, filterDispatch: null });
 
-const tarif:iTarifModel = {
+const tarif: iTarifModel = {
   "13": "Комфорт+",
   "14": "Комфорт",
   "22": "Комфорт2",
@@ -56,51 +59,29 @@ const SET_TARIF: ActionType = "SET_TARIF";
 const SET_MODEL: ActionType = "SET_MODEL";
 const SET_BRAND: ActionType = "SET_BRAND";
 
-const setTarif = (tarifCode:tTarifCode) => {
+export const setTarif = (tarif: tTarif): SetTarifAction => {
   return {
     type: "SET_TARIF",
-    payload: tarifCode,
+    payload: tarif,
   };
 };
 
+export const setModel = (model: tVehicles): SetModelAction => {
+  return {
+    type: "SET_MODEL",
+    payload: model,
+  };
+};
 
-const actionCreator =  () => {
-  return 
-}
-
-const reducer = (
-  state: iFilter,
-  action: { type: ActionType; payload: tTarif | tBrands | tVehicles },
-) => {
-  switch (action.type) {
-    case SET_TARIF:
-
-      const payload = action.payload;
-      
-      return {
-        ...state,
-      };
-    case SET_MODEL:
-      return {...state};
-    case SET_BRAND:
-      return {...state};
-    default:
-      return state;
-  }
+export const setBrand = (brand: tBrand): SetBrandAction => {
+  return {
+    type: "SET_BRAND",
+    payload: brand,
+  };
 };
 
 const CatalogContainer = () => {
   const [data, setData] = useState<iCatalogue | null>(null);
-
-  const [filterState, dispatch] = useReducer<
-    (
-      state: iFilter,
-      action: {
-        type: ActionType;
-        payload: tTarif | tBrands | tVehicles;
-      },
-    ) => iFilter
-  >(reducer, initialState);
 
   useEffect(() => {
     getCatalogByPageId("2")
@@ -113,16 +94,10 @@ const CatalogContainer = () => {
 
   return (
     <div>
-      <catalogueContext.Provider
-        value={{
-          catalogue: data,
-          filter: filterState,
-          filterDispatch: dispatch,
-        }}
-      >
+      <Provider store={store}>
         <Filter />
         {data && <Catalogue catalogue={data} />}
-      </catalogueContext.Provider>
+      </Provider>
       <div>preloader</div>
     </div>
   );
@@ -142,5 +117,3 @@ async function getCatalogByPageId(pageId: string) {
     return null;
   }
 }
-
-

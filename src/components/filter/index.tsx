@@ -1,18 +1,20 @@
 import { catalogueContext } from "@/containers/CatalogueContainer";
+import store, { RootState } from "@/store";
 import React, { useContext } from "react";
+import { useSelector } from "react-redux";
+
+const brandSelector = (state: RootState) => state.brand;
 
 const Filter = () => {
-  const ctx = useContext(catalogueContext);
+    const brand = useSelector(brandSelector);
+    
+    const value = brand.value;
 
-  console.log({ ctx });
+    
 
-  return (
-    <div>
-      <div>{ctx.filter.brands.value}</div>
-          <div>{ctx.filter.models.value?.brand}</div>
-          <div></div>
-    </div>
-  );
+    return (<div>
+        {value && <div>{ value }</div>}
+  </div>);
 };
 
 export default Filter;

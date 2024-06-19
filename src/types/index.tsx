@@ -1,35 +1,36 @@
+import { setBrand, setModel, setTarif } from "@/containers/CatalogueContainer";
 import { getTarifByCode } from "@/utils";
 
 export type tFilterDispatch = React.Dispatch<{
   type: ActionType;
-  payload: tTarif | tBrands | tVehicles;
+  payload: ReducerAction<ActionCreator>;
 }>;
 
 export type ActionType = "SET_TARIF" | "SET_MODEL" | "SET_BRAND";
 
 export type Action<T> = {
-    type: ActionType;
-    payload:tTarif | tBrands | tVehicles
-}
+  type: ActionType;
+  payload: tTarif | tBrand | tVehicles;
+};
 
 export type SetTarifAction = {
-    type: "SET_TARIF";
-    payload: tTarif;
-}
+  type: "SET_TARIF";
+  payload: tTarif;
+};
 export type SetModelAction = {
-    type: "SET_MODEL";
-    payload: tVehicles;
-}
+  type: "SET_MODEL";
+  payload: tVehicles;
+};
 export type SetBrandAction = {
-    type: "SET_BRAND";
-    payload: tBrands;
-}
+  type: "SET_BRAND";
+  payload: tBrand;
+};
 
 export interface iFilter {
   brands: {
     name: "Марка";
     code: "brand";
-    value: tBrands | null;
+    value: tBrand | null;
   };
   models: {
     name: "Модель";
@@ -38,18 +39,16 @@ export interface iFilter {
   };
   tarif: {
     name: "Тариф";
-      type: "tarif";
-      tarifCode: tTarifCode|null;
-      tarifName: tTarifName|null;
-        value: tTarif | null;
+    type: "tarif";
+    value: tTarif | null;
   };
 }
 
 export interface iTarifModel {
-    "13": "Комфорт+",
-    "14": "Комфорт",
-    "22": "Комфорт2",
-    "26": "Комфорт3"
+  "13": "Комфорт+";
+  "14": "Комфорт";
+  "22": "Комфорт2";
+  "26": "Комфорт3";
 }
 
 export type tTarifCode = "13" | "14" | "22" | "26";
@@ -61,7 +60,7 @@ export type tTarif =
   | { "22": "Комфорт2" }
   | { "26": "Комфорт3" };
 
-export type tBrands =
+export type tBrand =
   | "BMW"
   | "Chery"
   | "EXEED"
@@ -138,3 +137,6 @@ export interface iCatalogueItem {
   image: string;
   tarif: string[];
 }
+
+export type ReducerAction<T extends ActionCreator> = ReturnType<T>;
+export type ActionCreator = typeof setTarif | typeof setModel | typeof setBrand;
