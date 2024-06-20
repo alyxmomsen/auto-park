@@ -1,5 +1,4 @@
-import { setBrand, setModel, setTarif } from "@/containers/CatalogueContainer";
-import { getTarifByCode } from "@/utils";
+import { setBrand, setModel, setTarif } from "@/utils/actions";
 
 export type tFilterDispatch = React.Dispatch<{
   type: ActionType;

@@ -9,9 +9,6 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
 import {
   CatalogCtx,
-  MultiActionCreator,
-  ReducerAction,
-  setBrand,
 } from "@/containers/CatalogueContainer";
 import { SetBrandAction, tBrand } from "@/types";
 
@@ -63,11 +60,11 @@ export default function MultipleSelectChip({
   const [personName, setPersonName] = React.useState<string[]>([]);
   const message = "the message string";
 
-    React.useEffect(() => {
-        console.log('heroweem');
-        console.log({ message: personName });
-        const brands = personName as tBrand[]
-        dispatch ? dispatch({ type: "SET_BRAND", payload: brands }) : null;
+  React.useEffect(() => {
+    console.log("heroweem");
+    console.log({ message: personName });
+    const brands = personName as tBrand[];
+    dispatch ? dispatch({ type: "SET_BRAND", payload: brands }) : null;
   }, [personName]);
 
   const handleChange = (event: SelectChangeEvent<typeof personName>) => {

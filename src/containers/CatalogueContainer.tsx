@@ -2,8 +2,9 @@
 
 import Catalogue from "@/components/catalogue";
 import Filter from "@/components/filter";
-import { myHandler } from "@/myHooks";
-import store from "@/store";
+import { myHandler, useReducers } from "@/myHooks";
+import { brandReducer, modelNameReducer, tariffReducer } from "@/reducers";
+
 import {
   ActionType,
   iCatalogue,
@@ -12,38 +13,29 @@ import {
   iFilterItem__modelName,
   iFilterItem__tariff,
   iTarifModel,
-  SetBrandAction,
-  SetModelAction,
-  SetTarifAction,
-  tBrand,
-  tFilterDispatch,
-  tTarif,
-  tTarifCode,
-  tVehicles,
 } from "@/types";
+import { setBrand, setModel, setTarif } from "@/utils/actions";
 import axios from "axios";
-import { Coming_Soon } from "next/font/google";
-import { redirect } from "next/navigation";
-import React, { createContext, useEffect, useReducer, useState } from "react";
-import { Provider, useDispatch } from "react-redux";
+import React, { createContext, useEffect, useState } from "react";
 
-const initialState__brand: iFilterItem__brand = {
+
+export const initialState__brand: iFilterItem__brand = {
   name: "Марка",
   code: "brand",
   value: [],
 };
-const initialState__model: iFilterItem__modelName = {
+export const initialState__model: iFilterItem__modelName = {
   name: "Модель",
   type: "model",
   value: [],
 };
-const initialState__tariff: iFilterItem__tariff = {
+export const initialState__tariff: iFilterItem__tariff = {
   name: "Тариф",
   type: "tarif",
   value: [],
 };
 
-const initialState: iFilter = {
+export const initialState: iFilter = {
   brands: initialState__brand,
   models: initialState__model,
   tariff: initialState__tariff,
@@ -66,26 +58,7 @@ const SET_TARIF: ActionType = "SET_TARIF";
 const SET_MODEL: ActionType = "SET_MODEL";
 const SET_BRAND: ActionType = "SET_BRAND";
 
-export const setTarif = (tariff: tTarif): SetTarifAction => {
-  return {
-    type: "SET_TARIF",
-    payload: tariff,
-  };
-};
 
-export const setModel = (model: tVehicles): SetModelAction => {
-  return {
-    type: "SET_MODEL",
-    payload: model,
-  };
-};
-
-export const setBrand = (brand: tBrand[]): SetBrandAction => {
-  return {
-    type: "SET_BRAND",
-    payload: brand,
-  };
-};
 
 interface iCatalogueRootState {}
 
@@ -113,48 +86,7 @@ export const CatalogCtx = createContext<{
   },
 });
 
-const tariffReducer = (
-  state = initialState__tariff,
-  action: ReturnType<typeof setTarif>,
-) => {
-  switch (action.type) {
-    case "SET_TARIF":
-      return {
-        ...state,
-        value: [...state.value, action.payload],
-      };
-    default:
-      return state;
-  }
-};
-const modelNameReducer = (
-  state = initialState__model,
-  action: ReturnType<typeof setModel>,
-) => {
-  switch (action.type) {
-    case "SET_MODEL":
-      return {
-        ...state,
-        value: [...state.value, action.payload],
-      };
-    default:
-      return state;
-  }
-};
-const brandReducer = (
-  state = initialState__brand,
-  action: ReturnType<typeof setBrand>,
-) => {
-  switch (action.type) {
-    case "SET_BRAND":
-      return {
-        ...state,
-        value: [...state.value, ...action.payload],
-      };
-    default:
-      return state;
-  }
-};
+
 
 export type ReducerAction<T extends MultiActionCreator> = ReturnType<T>;
 export type MultiActionCreator =
@@ -162,27 +94,28 @@ export type MultiActionCreator =
   | typeof setModel
   | typeof setBrand;
 
-type ModelNameState = typeof initialState__model;
-type TarifState = typeof initialState__tariff;
-type BrandState = typeof initialState__brand;
+export type ModelNameState = typeof initialState__model;
+export type TarifState = typeof initialState__tariff;
+export type BrandState = typeof initialState__brand;
 
 const CatalogContainer = () => {
   const [data, setData] = useState<iCatalogue | null>(null);
 
-  const [localstorage, setLocalStorage] = useState<{}>({});
-
-  const [model_modelName, modelNameDispatch] = useReducer<
-    typeof modelNameReducer
-  >(modelNameReducer, initialState__model);
-
-  const [model_brand, brandDispatch] = useReducer<typeof brandReducer>(
+  const {
+    model_brand,
+    model_modelName,
+    model_tariff,
+    brandDispatch,
+    modelNameDispatch,
+    tariffDispatch,
+  } = useReducers({
     brandReducer,
-    initialState__brand,
-  );
-  const [model_tariff, tariffDispatch] = useReducer<typeof tariffReducer>(
+    modelNameReducer,
     tariffReducer,
+    initialState__brand,
+    initialState__model,
     initialState__tariff,
-  );
+  });
 
   useEffect(() => {
     getCatalogByPageId("1").then((response) => {
@@ -190,44 +123,20 @@ const CatalogContainer = () => {
     });
   }, []);
 
-  
   useEffect(() => {
-    const { brandParamsString:bps } = myHandler({brands:model_brand.value});
-    console.log('param string changed' , bps);
-    getCatalogByPageId("2" , bps).then((response) => {
+    const { brandParamsString: bps } = myHandler({ brands: model_brand.value });
+    console.log("param string changed", bps);
+    getCatalogByPageId("2", bps).then((response) => {
       setData(response);
     });
-  } , [model_brand]);
+  }, [model_brand]);
 
   useEffect(() => {
-    // console.log({ model_brand, model_tariff, model_modelName });
-
-    const brands = [];
-    const models = [];
-    const tarifs = [];
-
-    const modelInitValue = "";
-    const params__models = model_modelName.value.reduce(
-      (accumulator, currentValue) => {
-        const str = "&model\\[\\]=" + currentValue.models;
-        const regexp = new RegExp(str, "gi");
-        const testResult = regexp.test(accumulator);
-
-        console.log({ accumulator, result: testResult });
-        return (
-          accumulator +
-          (!testResult ? "&model[]=" + currentValue["models"] : "")
-        );
-      },
-      modelInitValue,
-    );
 
     getCatalogByPageId("1").then((response) => {
       setData(response);
     });
   }, [model_brand, model_tariff, model_modelName]);
-
-  useEffect(() => {}, [data]);
 
   return (
     <div>

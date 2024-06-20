@@ -12,8 +12,6 @@ const Catalogue = ({ catalogue }: { catalogue: iCatalogue }) => {
     const { modelNameDispatch } = ctx.controller;
     const { brandDispatch } = ctx.controller;
     const { tariffDispatch } = ctx.controller;
-    
-   
   }, []);
 
   console.log({ catalogue });
