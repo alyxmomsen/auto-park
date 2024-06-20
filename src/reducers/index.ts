@@ -17,7 +17,7 @@ export const tariffReducer = (
     case "SET_TARIF":
       return {
         ...state,
-        value: [...state.value, action.payload],
+        value: [/* ...state.value,  */...action.payload],
       };
     default:
       return state;

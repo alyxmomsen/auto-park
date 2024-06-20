@@ -4,6 +4,7 @@ import {
   initialState__tariff,
 } from "@/containers/CatalogueContainer";
 import { brandReducer, modelNameReducer, tariffReducer } from "@/reducers";
+import { tBrand, tTarif, tVehicles } from "@/types";
 import { useReducer } from "react";
 
 export function myHandler({
@@ -11,13 +12,13 @@ export function myHandler({
   tariffes = [],
   models = [],
 }: {
-  brands: string[];
+  brands?: string[];
   models?: string[];
-  tariffes?: string[];
+  tariffes?: tTarif[];
 }) {
   const brandParamsString = fn(brands, "brand");
-  const tariffParamsString = fn(brands, "tarif");
-  const modelParamsString = fn(brands, "model");
+  const tariffParamsString = fn(tariffes.map(elem => elem.code), "tarif");
+  const modelParamsString = fn(models, "model");
 
   return {
     brandParamsString,
@@ -26,7 +27,7 @@ export function myHandler({
   };
 }
 
-function fn(arr: string[], paramType: "brand" | "tarif" | "model") {
+function fn(arr: (string)[], paramType: "brand" | "tarif" | "model") {
   const brandInitValue = "";
   const params__brand = arr.reduce((accumulator, currentValue) => {
     const str = `&${paramType}\\[\\]=` + currentValue;

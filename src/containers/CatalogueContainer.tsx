@@ -20,6 +20,8 @@ import {
 import axios from "axios";
 import React, { createContext, useEffect, useState } from "react";
 
+export type FilterNameCode = "brand" | "model" | "tarif";
+export type FilterName = "Марка" | "Модель" | "Тариф";
 export const initialState__brand: iFilterItem__brand = {
   name: "Марка",
   code: "brand",
@@ -120,10 +122,21 @@ const CatalogContainer = () => {
   }, [model_brand]);
 
   useEffect(() => {
+    console.log('tarif changed' , model_tariff);
+    const { tariffParamsString } = myHandler({ tariffes: model_tariff.value });
+    console.log({tariffParamsString});
+    getCatalogByPageId("1" , tariffParamsString).then((response) => {
+      setData(response);
+    });
+  }, [model_tariff]);
+
+  useEffect(() => {
+    console.log('model changed' , model_modelName);
+    
     getCatalogByPageId("1").then((response) => {
       setData(response);
     });
-  }, [model_tariff, model_modelName]);
+  }, [model_modelName]);
 
   return (
     <div>

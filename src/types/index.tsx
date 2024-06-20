@@ -14,7 +14,7 @@ export type ActionType = "SET_TARIF" | "SET_MODEL" | "SET_BRAND";
 /* ============================= */
 export type SetTarifAction = {
   type: "SET_TARIF";
-  payload: tTarif;
+  payload: tTarif[];
 };
 export type SetModelAction = {
   type: "SET_MODEL";
@@ -61,6 +61,8 @@ export type tTarif13 = { code: "13"; name: "Комфорт+" };
 export type tTarif14 = { code: "14"; name: "Комфорт" };
 export type tTarif22 = { code: "22"; name: "Комфорт2" };
 export type tTarif26 = { code: "26"; name: "Комфорт3" };
+
+export type TarifName = "Комфорт+" | "Комфорт" | "Комфорт2" | "Комфорт3";
 
 export type tTarif = tTarif13 | tTarif14 | tTarif22 | tTarif26;
 

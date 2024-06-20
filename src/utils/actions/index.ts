@@ -7,7 +7,7 @@ import {
   tVehicles,
 } from "@/types";
 
-export const ActionCreator__setTarif = (tariff: tTarif): SetTarifAction => {
+export const ActionCreator__setTarif = (tariff: tTarif[]): SetTarifAction => {
   return {
     type: "SET_TARIF",
     payload: tariff,

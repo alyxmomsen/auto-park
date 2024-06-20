@@ -1,4 +1,4 @@
-import { CatalogCtx } from "@/containers/CatalogueContainer";
+import { CatalogCtx, FilterName, FilterNameCode } from "@/containers/CatalogueContainer";
 import React, { useContext } from "react";
 
 import Box from "@mui/material/Box";
@@ -21,7 +21,7 @@ const Brand = [
   "Toyota",
 ];
 
-const tarifVariants = [
+export const tarifVariants = [
   { code: "13", name: "Комфорт+" },
   { code: "14", name: "Комфорт" },
   { code: "22", name: "Комфорт2" },
@@ -81,7 +81,7 @@ const Filter = () => {
   const catalogueCtx = useContext(CatalogCtx);
 
   const models: string[] = [];
-  const byBrand = modelVariants
+  modelVariants
     .filter((elem) => {
       if (!catalogueCtx.model.filter_brand.value.length) return true;
       const brand = elem.brand as tBrand;
@@ -100,15 +100,17 @@ const Filter = () => {
     <div className="product_filter">
       <div className="product_filter__item product_filter__item--wrapper">
         <MultipleSelectChip
-          dispatch={catalogueCtx.controller.brandDispatch}
-          label="Brand"
+          brandDispatch={catalogueCtx.controller.brandDispatch}
+          label={catalogueCtx.model.filter_brand.name as FilterName}
+          filterNameCode={ catalogueCtx.model.filter_brand.code as FilterNameCode }
           list={Brand.map((elem, i) => ({ id: i.toString(), item: elem }))}
         />
       </div>
       <div className="product_filter__item product_filter__item--wrapper">
         <MultipleSelectChip
-          dispatch={null}
-          label="Model"
+          modelDispatch={catalogueCtx.controller.modelNameDispatch}
+          label={catalogueCtx.model.filter_modelName.name as FilterName}
+          filterNameCode={ catalogueCtx.model.filter_modelName.type as FilterNameCode }
           list={models.map((elem, i) => {
             return { id: i.toString(), item: elem };
           })}
@@ -116,8 +118,9 @@ const Filter = () => {
       </div>
       <div className="product_filter__item product_filter__item--wrapper">
         <MultipleSelectChip
-          dispatch={null}
-          label="Tariff"
+          tarifDispatch={catalogueCtx.controller.tariffDispatch}
+          label={catalogueCtx.model.filter__tariff.name as FilterName}
+          filterNameCode={ catalogueCtx.model.filter__tariff.type as FilterNameCode }
           list={tarifVariants.map((elem, i) => ({
             id: i.toString(),
             item: elem.name,
