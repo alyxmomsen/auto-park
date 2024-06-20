@@ -125,24 +125,36 @@ const tariffReducer = (
       }
     default: return state
   }
-
-  // return {};
 };
 const modelNameReducer = (
   state = initialState__model,
-  action: { type: string; payload: any },
+  action: ReturnType<typeof setModel>,
 ) => {
-  return state;
+  switch (action.type) {
+    case 'SET_MODEL':
+      return {
+        ...state,
+        value:[...state.value , action.payload] ,
+      }
+    default: return state
+  }
 };
 const brandReducer = (
   state = initialState__brand,
-  action: { type: string; payload: any },
+  action: ReturnType<typeof setBrand>,
 ) => {
-  return state;
+  switch (action.type) {
+    case 'SET_BRAND':
+      return {
+        ...state,
+        value:[...state.value , action.payload] ,
+      }
+    default: return state
+  }
 };
 
-export type ReducerAction<T extends ActionCreator> = ReturnType<T>
-export type ActionCreator = typeof setTarif | typeof setModel | typeof setBrand;
+export type ReducerAction<T extends MultiActionCreator> = ReturnType<T>
+export type MultiActionCreator = typeof setTarif | typeof setModel | typeof setBrand;
 
 type ModelNameState = typeof initialState__model;
 type TarifState = typeof initialState__tariff;
@@ -154,11 +166,10 @@ const CatalogContainer = () => {
   const [localstorage, setLocalStorage] = useState<{}>({});
 
   
-  const [model_modelName, modelNameDispatch] = useReducer<
-    (state:ModelNameState , action:ReducerAction<ActionCreator>) => ModelNameState
-    >(modelNameReducer, initialState__model);
+
+  const [model_modelName, modelNameDispatch] = useReducer<typeof modelNameReducer>(modelNameReducer, initialState__model);
   
-  const [model_brand, brandDispatch] = useReducer<(state:BrandState , action:ReducerAction<ActionCreator>) => BrandState>(
+  const [model_brand, brandDispatch] = useReducer<typeof brandReducer>(
     brandReducer,
     initialState__brand,
   );
@@ -175,10 +186,49 @@ const CatalogContainer = () => {
 
   }, []);
 
+  
+
 
   useEffect(() => {
 
-    console.log({model_brand , model_tariff , model_modelName});
+    // console.log({ model_brand, model_tariff, model_modelName });
+    
+    
+    const brands = [];
+    const models = [];
+    const tarifs = [];
+    const brandInitValue = '';
+    const params__brand = model_brand.value.reduce(
+      (accumulator, currentValue) => {
+
+        const str = '&brand\\[\\]=' + currentValue;
+        const regexp = new RegExp(str , 'gi') ;
+        const testResult = regexp.test(accumulator);
+        
+        console.log({accumulator , result: testResult});
+        return accumulator + (!testResult ? ('&brand[]=' + currentValue) : '');
+      },
+      brandInitValue,
+    );
+  const modelInitValue = '';
+    const params__models = model_modelName.value.reduce(
+      (accumulator, currentValue) => {
+
+        const str = '&model\\[\\]=' + currentValue.models;
+        const regexp = new RegExp(str , 'gi') ;
+        const testResult = regexp.test(accumulator);
+        
+        console.log({accumulator , result: testResult});
+        return accumulator + (!testResult ? ('&model[]=' + currentValue['models']) : '');
+      },
+      modelInitValue,
+    );
+
+    console.log({params__models});
+
+    getCatalogByPageId('1' , params__brand + params__models ).then(response => {
+      setData(response);
+    });
 
   } , [model_brand , model_tariff  ,model_modelName]);
 
@@ -215,10 +265,13 @@ const CatalogContainer = () => {
 
 export default CatalogContainer;
 
-async function getCatalogByPageId(pageId: string) {
+async function getCatalogByPageId(pageId: string , params:string = '') {
+
+  const baseURL_catalog_cars = "https://test.taxivoshod.ru/api/test/?w=catalog-cars"
+
   try {
     const response = await axios.get<iCatalogue>(
-      "https://test.taxivoshod.ru/api/test/?w=catalog-cars&page=" + pageId,
+      baseURL_catalog_cars + "&page=" + pageId + params,
     );
     const { data } = response;
     return data;

@@ -65,7 +65,7 @@ export type tTarif26 = { code: "26"; name: "Комфорт3" };
 
 export type tTarif = tTarif13 | tTarif14 | tTarif22 | tTarif26;
 
-// export type iTariff 
+// export type iTariff
 
 export type tBrand =
   | "BMW"
