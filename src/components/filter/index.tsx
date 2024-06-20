@@ -8,31 +8,124 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { colors } from "@mui/material";
 import { tVehicles } from "@/types";
+import MultipleSelectChip from "./select-element";
+
+const Brand = [
+  "BMW",
+  "Chery",
+  "EXEED",
+  "Geely",
+  "Hyundai",
+  "Kia",
+  "Renault",
+  "Toyota",
+];
+
+const tarifVariants = [
+  { code: "13", name: "Комфорт+" },
+  { code: "14", name: "Комфорт" },
+  { code: "22", name: "Комфорт2" },
+  { code: "26", name: "Комфорт3" },
+];
+
+const EXEED_models = ["LX", "TXL", "VX"];
+const Geely_models = ["Coolray"];
+const Hyundai_models = ["Sonata"];
+const Kia_models = ["K5", "Optima", "Rio"];
+const Renault_models = ["Logan"];
+const Toyota_models = ["Camry"];
+
+const modelVariants = [
+  {
+    brand: "BMW",
+    models: ["X2", "X5"],
+  },
+  {
+    brand: "Chery",
+    models: [
+      ,
+      "Arrizo 8",
+      "Tiggo 4",
+      "Tiggo 7 Pro",
+      "Tiggo 7 Pro Max",
+      "Tiggo 8 Pro Max",
+    ],
+  },
+  {
+    brand: "EXEED",
+    models: EXEED_models,
+  },
+  {
+    brand: "Geely",
+    models: Geely_models,
+  },
+  {
+    brand: "Hyundai",
+    models: Hyundai_models,
+  },
+  {
+    brand: "Kia",
+    models: Kia_models,
+  },
+  {
+    brand: "Renault",
+    models: Renault_models,
+  },
+  {
+    brand: "Toyota",
+    models: Toyota_models,
+  },
+];
 
 const Filter = () => {
   const catalogueCtx = useContext(CatalogCtx);
 
   console.log({ catalogueCtx });
 
+  catalogueCtx.controller.brandDispatch;
+
+  const models: string[] = [];
+  modelVariants.forEach((elem) =>
+    elem.models.forEach((elem) => {
+      if (elem) {
+        models.push(elem);
+      }
+    }),
+  );
+
   return (
     <div className="product_filter">
       <div className="product_filter__item product_filter__item--wrapper">
-        <BasicSelect label={ catalogueCtx.model.filter__tariff.name }  list={catalogueCtx.model.filter__tariff.value.map(elem => elem.name)} />
+        <MultipleSelectChip
+          dispatch={catalogueCtx.controller.brandDispatch}
+          label="Brand"
+          list={Brand.map((elem, i) => ({ id: i.toString(), item: elem }))}
+        />
       </div>
       <div className="product_filter__item product_filter__item--wrapper">
-        <BasicSelect label={ catalogueCtx.model.filter_brand.name}  list={catalogueCtx.model.filter_brand.value.map(elem => elem)} />
+        <MultipleSelectChip
+          dispatch={null}
+          label="Model"
+          list={models.map((elem, i) => ({ id: i.toString(), item: elem }))}
+        />
       </div>
       <div className="product_filter__item product_filter__item--wrapper">
-        <BasicSelect label={ catalogueCtx.model.filter_modelName.name } list={catalogueCtx.model.filter_modelName.value.map(elem => elem.models)} />
+        <MultipleSelectChip
+          dispatch={null}
+          label="Tariff"
+          list={tarifVariants.map((elem, i) => ({
+            id: i.toString(),
+            item: elem.name,
+          }))}
+        />
       </div>
-      
     </div>
   );
 };
 
 export default Filter;
 
-function BasicSelect({ list , label }: { list: string[] , label:string }) {
+function BasicSelect({ list, label }: { list: string[]; label: string }) {
   const [age, setAge] = React.useState("");
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -46,10 +139,7 @@ function BasicSelect({ list , label }: { list: string[] , label:string }) {
   return (
     <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
-        <InputLabel
-          color="error"
-          id="demo-simple-select-label"
-        >
+        <InputLabel color="error" id="demo-simple-select-label">
           {label}
         </InputLabel>
         <Select
@@ -71,6 +161,3 @@ function BasicSelect({ list , label }: { list: string[] , label:string }) {
     </Box>
   );
 }
-
-
-

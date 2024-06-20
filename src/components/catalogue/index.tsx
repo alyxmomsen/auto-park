@@ -12,27 +12,8 @@ const Catalogue = ({ catalogue }: { catalogue: iCatalogue }) => {
     const { modelNameDispatch } = ctx.controller;
     const { brandDispatch } = ctx.controller;
     const { tariffDispatch } = ctx.controller;
-
-    if (brandDispatch) {
-      // brandDispatch({type:"SET_BRAND" , payload:"Hyundai"});
-      brandDispatch({ type: "SET_BRAND", payload: "BMW" });
-      // brandDispatch({type:"SET_BRAND" , payload:"Chery"});
-    }
-
-    // if (tariffDispatch) {
-    //   tariffDispatch({ type: "SET_TARIF", payload: {code:"14" , name:"Комфорт"} });
-    //   tariffDispatch({ type: "SET_TARIF", payload: {code:"22" , name:"Комфорт2"} });
-    //   tariffDispatch({ type: "SET_TARIF", payload: {code:"26" , name:"Комфорт3"} });
-    // }
-
-    if (modelNameDispatch) {
-      // modelNameDispatch({ type:"SET_MODEL", payload: { models: 'Camry', brand: 'Toyota' } });
-      modelNameDispatch({
-        type: "SET_MODEL",
-        payload: { brand: "BMW", models: "X5" },
-      });
-      // modelNameDispatch({ type:"SET_MODEL", payload: { models: 'K5', brand: 'Kia' } });
-    }
+    
+   
   }, []);
 
   console.log({ catalogue });

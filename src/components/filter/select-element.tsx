@@ -1,12 +1,19 @@
-import * as React from 'react';
-import { Theme, useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import Chip from '@mui/material/Chip';
+import * as React from "react";
+import { Theme, useTheme } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Chip from "@mui/material/Chip";
+import {
+  CatalogCtx,
+  MultiActionCreator,
+  ReducerAction,
+  setBrand,
+} from "@/containers/CatalogueContainer";
+import { SetBrandAction, tBrand } from "@/types";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -20,16 +27,16 @@ const MenuProps = {
 };
 
 const names = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
+  "Oliver Hansen",
+  "Van Henry",
+  "April Tucker",
+  "Ralph Hubbard",
+  "Omar Alexander",
+  "Carlos Abbott",
+  "Miriam Wagner",
+  "Bradley Wilkerson",
+  "Virginia Andrews",
+  "Kelly Snyder",
 ];
 
 function getStyles(name: string, personName: readonly string[], theme: Theme) {
@@ -41,24 +48,42 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
   };
 }
 
-export default function MultipleSelectChip() {
+export default function MultipleSelectChip({
+  dispatch,
+  list = [],
+  label = "undefinded",
+}: {
+  dispatch: React.Dispatch<SetBrandAction> | null;
+  list?: { id?: string; item: string }[];
+  label?: string;
+}) {
+  const ctx = React.useContext(CatalogCtx);
+
   const theme = useTheme();
   const [personName, setPersonName] = React.useState<string[]>([]);
+  const message = "the message string";
+
+    React.useEffect(() => {
+        console.log('heroweem');
+        console.log({ message: personName });
+        const brands = personName as tBrand[]
+        dispatch ? dispatch({ type: "SET_BRAND", payload: brands }) : null;
+  }, [personName]);
 
   const handleChange = (event: SelectChangeEvent<typeof personName>) => {
     const {
-      target: { value },
+      target: { value, name },
     } = event;
     setPersonName(
       // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
+      typeof value === "string" ? value.split(",") : value,
     );
   };
 
   return (
     <div>
       <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id="demo-multiple-chip-label">Chip</InputLabel>
+        <InputLabel id="demo-multiple-chip-label">{label}</InputLabel>
         <Select
           labelId="demo-multiple-chip-label"
           id="demo-multiple-chip"
@@ -67,7 +92,7 @@ export default function MultipleSelectChip() {
           onChange={handleChange}
           input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
           renderValue={(selected) => (
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
               {selected.map((value) => (
                 <Chip key={value} label={value} />
               ))}
@@ -75,13 +100,13 @@ export default function MultipleSelectChip() {
           )}
           MenuProps={MenuProps}
         >
-          {names.map((name) => (
+          {list.map((name) => (
             <MenuItem
-              key={name}
-              value={name}
-              style={getStyles(name, personName, theme)}
+              key={name.id}
+              value={name.item}
+              style={getStyles(name.item, personName, theme)}
             >
-              {name}
+              {name.item}
             </MenuItem>
           ))}
         </Select>

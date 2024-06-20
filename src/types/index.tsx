@@ -23,7 +23,7 @@ export type SetModelAction = {
 };
 export type SetBrandAction = {
   type: "SET_BRAND";
-  payload: tBrand;
+  payload: tBrand[];
 };
 
 export interface iFilterItem__brand {
@@ -56,7 +56,6 @@ export interface iTarifModel {
 }
 
 export type tTarifCode = "13" | "14" | "22" | "26";
-export type tTarifName = ReturnType<typeof getTarifByCode>;
 
 export type tTarif13 = { code: "13"; name: "Комфорт+" };
 export type tTarif14 = { code: "14"; name: "Комфорт" };

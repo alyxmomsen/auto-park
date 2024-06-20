@@ -2,6 +2,7 @@
 
 import Catalogue from "@/components/catalogue";
 import Filter from "@/components/filter";
+import { myHandler } from "@/myHooks";
 import store from "@/store";
 import {
   ActionType,
@@ -79,7 +80,7 @@ export const setModel = (model: tVehicles): SetModelAction => {
   };
 };
 
-export const setBrand = (brand: tBrand): SetBrandAction => {
+export const setBrand = (brand: tBrand[]): SetBrandAction => {
   return {
     type: "SET_BRAND",
     payload: brand,
@@ -116,14 +117,14 @@ const tariffReducer = (
   state = initialState__tariff,
   action: ReturnType<typeof setTarif>,
 ) => {
-
   switch (action.type) {
-    case 'SET_TARIF':
+    case "SET_TARIF":
       return {
         ...state,
-        value:[...state.value , action.payload] ,
-      }
-    default: return state
+        value: [...state.value, action.payload],
+      };
+    default:
+      return state;
   }
 };
 const modelNameReducer = (
@@ -131,12 +132,13 @@ const modelNameReducer = (
   action: ReturnType<typeof setModel>,
 ) => {
   switch (action.type) {
-    case 'SET_MODEL':
+    case "SET_MODEL":
       return {
         ...state,
-        value:[...state.value , action.payload] ,
-      }
-    default: return state
+        value: [...state.value, action.payload],
+      };
+    default:
+      return state;
   }
 };
 const brandReducer = (
@@ -144,17 +146,21 @@ const brandReducer = (
   action: ReturnType<typeof setBrand>,
 ) => {
   switch (action.type) {
-    case 'SET_BRAND':
+    case "SET_BRAND":
       return {
         ...state,
-        value:[...state.value , action.payload] ,
-      }
-    default: return state
+        value: [...state.value, ...action.payload],
+      };
+    default:
+      return state;
   }
 };
 
-export type ReducerAction<T extends MultiActionCreator> = ReturnType<T>
-export type MultiActionCreator = typeof setTarif | typeof setModel | typeof setBrand;
+export type ReducerAction<T extends MultiActionCreator> = ReturnType<T>;
+export type MultiActionCreator =
+  | typeof setTarif
+  | typeof setModel
+  | typeof setBrand;
 
 type ModelNameState = typeof initialState__model;
 type TarifState = typeof initialState__tariff;
@@ -165,8 +171,10 @@ const CatalogContainer = () => {
 
   const [localstorage, setLocalStorage] = useState<{}>({});
 
-  const [model_modelName, modelNameDispatch] = useReducer<typeof modelNameReducer>(modelNameReducer, initialState__model);
-  
+  const [model_modelName, modelNameDispatch] = useReducer<
+    typeof modelNameReducer
+  >(modelNameReducer, initialState__model);
+
   const [model_brand, brandDispatch] = useReducer<typeof brandReducer>(
     brandReducer,
     initialState__brand,
@@ -177,65 +185,49 @@ const CatalogContainer = () => {
   );
 
   useEffect(() => {
-
-    getCatalogByPageId('1').then(response => {
+    getCatalogByPageId("1").then((response) => {
       setData(response);
     });
-
   }, []);
 
   
-
+  useEffect(() => {
+    const { brandParamsString:bps } = myHandler({brands:model_brand.value});
+    console.log('param string changed' , bps);
+    getCatalogByPageId("2" , bps).then((response) => {
+      setData(response);
+    });
+  } , [model_brand]);
 
   useEffect(() => {
-
     // console.log({ model_brand, model_tariff, model_modelName });
-    
-    
+
     const brands = [];
     const models = [];
     const tarifs = [];
-    const brandInitValue = '';
-    const params__brand = model_brand.value.reduce(
-      (accumulator, currentValue) => {
 
-        const str = '&brand\\[\\]=' + currentValue;
-        const regexp = new RegExp(str , 'gi') ;
-        const testResult = regexp.test(accumulator);
-        
-        console.log({accumulator , result: testResult});
-        return accumulator + (!testResult ? ('&brand[]=' + currentValue) : '');
-      },
-      brandInitValue,
-    );
-  const modelInitValue = '';
+    const modelInitValue = "";
     const params__models = model_modelName.value.reduce(
       (accumulator, currentValue) => {
-
-        const str = '&model\\[\\]=' + currentValue.models;
-        const regexp = new RegExp(str , 'gi') ;
+        const str = "&model\\[\\]=" + currentValue.models;
+        const regexp = new RegExp(str, "gi");
         const testResult = regexp.test(accumulator);
-        
-        console.log({accumulator , result: testResult});
-        return accumulator + (!testResult ? ('&model[]=' + currentValue['models']) : '');
+
+        console.log({ accumulator, result: testResult });
+        return (
+          accumulator +
+          (!testResult ? "&model[]=" + currentValue["models"] : "")
+        );
       },
       modelInitValue,
     );
 
-    console.log({params__models});
-
-    getCatalogByPageId('1' , params__brand + params__models ).then(response => {
+    getCatalogByPageId("1").then((response) => {
       setData(response);
     });
+  }, [model_brand, model_tariff, model_modelName]);
 
-  } , [model_brand , model_tariff  ,model_modelName]);
-
-
-  useEffect(() => {
-
-    console.log({data});
-
-  } , [data]);
+  useEffect(() => {}, [data]);
 
   return (
     <div>
@@ -263,9 +255,9 @@ const CatalogContainer = () => {
 
 export default CatalogContainer;
 
-async function getCatalogByPageId(pageId: string , params:string = '') {
-
-  const baseURL_catalog_cars = "https://test.taxivoshod.ru/api/test/?w=catalog-cars"
+async function getCatalogByPageId(pageId: string, params: string = "") {
+  const baseURL_catalog_cars =
+    "https://test.taxivoshod.ru/api/test/?w=catalog-cars";
 
   try {
     const response = await axios.get<iCatalogue>(
