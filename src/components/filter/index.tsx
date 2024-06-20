@@ -7,7 +7,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { colors } from "@mui/material";
-import { tVehicles } from "@/types";
+import { tBrand, tVehicles } from "@/types";
 import MultipleSelectChip from "./select-element";
 
 const Brand = [
@@ -80,18 +80,21 @@ const modelVariants = [
 const Filter = () => {
   const catalogueCtx = useContext(CatalogCtx);
 
-  console.log({ catalogueCtx });
-
-  catalogueCtx.controller.brandDispatch;
-
   const models: string[] = [];
-  modelVariants.forEach((elem) =>
-    elem.models.forEach((elem) => {
-      if (elem) {
-        models.push(elem);
-      }
-    }),
-  );
+  const byBrand = modelVariants
+    .filter((elem) => {
+      if (!catalogueCtx.model.filter_brand.value.length) return true;
+      const brand = elem.brand as tBrand;
+
+      return catalogueCtx.model.filter_brand.value.includes(brand);
+    })
+    .forEach((elem) =>
+      elem.models.filter((elem) => {
+        if (elem) {
+          models.push(elem);
+        }
+      }),
+    );
 
   return (
     <div className="product_filter">
@@ -106,7 +109,9 @@ const Filter = () => {
         <MultipleSelectChip
           dispatch={null}
           label="Model"
-          list={models.map((elem, i) => ({ id: i.toString(), item: elem }))}
+          list={models.map((elem, i) => {
+            return { id: i.toString(), item: elem };
+          })}
         />
       </div>
       <div className="product_filter__item product_filter__item--wrapper">

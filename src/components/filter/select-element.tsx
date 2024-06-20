@@ -7,9 +7,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
-import {
-  CatalogCtx,
-} from "@/containers/CatalogueContainer";
+import { CatalogCtx } from "@/containers/CatalogueContainer";
 import { SetBrandAction, tBrand } from "@/types";
 
 const ITEM_HEIGHT = 48;
@@ -22,19 +20,6 @@ const MenuProps = {
     },
   },
 };
-
-const names = [
-  "Oliver Hansen",
-  "Van Henry",
-  "April Tucker",
-  "Ralph Hubbard",
-  "Omar Alexander",
-  "Carlos Abbott",
-  "Miriam Wagner",
-  "Bradley Wilkerson",
-  "Virginia Andrews",
-  "Kelly Snyder",
-];
 
 function getStyles(name: string, personName: readonly string[], theme: Theme) {
   return {
@@ -58,13 +43,14 @@ export default function MultipleSelectChip({
 
   const theme = useTheme();
   const [personName, setPersonName] = React.useState<string[]>([]);
-  const message = "the message string";
 
   React.useEffect(() => {
-    console.log("heroweem");
-    console.log({ message: personName });
+    console.log("update");
+
     const brands = personName as tBrand[];
-    dispatch ? dispatch({ type: "SET_BRAND", payload: brands }) : null;
+    if (dispatch) {
+      dispatch({ type: "SET_BRAND", payload: brands });
+    }
   }, [personName]);
 
   const handleChange = (event: SelectChangeEvent<typeof personName>) => {

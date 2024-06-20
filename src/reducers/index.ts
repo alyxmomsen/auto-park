@@ -1,9 +1,17 @@
-import { initialState__brand, initialState__model, initialState__tariff } from "@/containers/CatalogueContainer";
-import { setBrand, setModel, setTarif } from "@/utils/actions";
+import {
+  initialState__brand,
+  initialState__model,
+  initialState__tariff,
+} from "@/containers/CatalogueContainer";
+import {
+  ActionCreator__setBrand,
+  ActionCreator__setModel,
+  ActionCreator__setTarif,
+} from "@/utils/actions";
 
 export const tariffReducer = (
   state = initialState__tariff,
-  action: ReturnType<typeof setTarif>,
+  action: ReturnType<typeof ActionCreator__setTarif>,
 ) => {
   switch (action.type) {
     case "SET_TARIF":
@@ -16,11 +24,9 @@ export const tariffReducer = (
   }
 };
 
-export type tTariffReducer = typeof tariffReducer;
-
 export const modelNameReducer = (
   state = initialState__model,
-  action: ReturnType<typeof setModel>,
+  action: ReturnType<typeof ActionCreator__setModel>,
 ) => {
   switch (action.type) {
     case "SET_MODEL":
@@ -33,21 +39,21 @@ export const modelNameReducer = (
   }
 };
 
-export type tModelNameReducer = typeof modelNameReducer;
-
 export const brandReducer = (
   state = initialState__brand,
-  action: ReturnType<typeof setBrand>,
+  action: ReturnType<typeof ActionCreator__setBrand>,
 ) => {
   switch (action.type) {
     case "SET_BRAND":
       return {
         ...state,
-        value: [...state.value, ...action.payload],
+        value: [...action.payload],
       };
     default:
       return state;
   }
 };
 
+export type tTariffReducer = typeof tariffReducer;
+export type tModelNameReducer = typeof modelNameReducer;
 export type tBrandReducer = typeof brandReducer;

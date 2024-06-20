@@ -1,11 +1,10 @@
 import {
-  BrandState,
-  CatalogCtx,
-  ModelNameState,
-  TarifState,
+  initialState__brand,
+  initialState__model,
+  initialState__tariff,
 } from "@/containers/CatalogueContainer";
-import { tBrandReducer, tModelNameReducer, tTariffReducer } from "@/reducers";
-import { useContext, useEffect, useReducer } from "react";
+import { brandReducer, modelNameReducer, tariffReducer } from "@/reducers";
+import { useReducer } from "react";
 
 export function myHandler({
   brands = [],
@@ -40,21 +39,7 @@ function fn(arr: string[], paramType: "brand" | "tarif" | "model") {
   return params__brand;
 }
 
-export function useReducers({
-  modelNameReducer,
-  initialState__model,
-  brandReducer,
-  initialState__brand,
-  tariffReducer,
-  initialState__tariff,
-}: {
-  modelNameReducer: tModelNameReducer;
-  initialState__model: ModelNameState;
-  brandReducer: tBrandReducer;
-  initialState__brand: BrandState;
-  tariffReducer: tTariffReducer;
-  initialState__tariff: TarifState;
-}) {
+export function useReducers() {
   const [model_modelName, modelNameDispatch] = useReducer<
     typeof modelNameReducer
   >(modelNameReducer, initialState__model);

@@ -3,7 +3,6 @@
 import Catalogue from "@/components/catalogue";
 import Filter from "@/components/filter";
 import { myHandler, useReducers } from "@/myHooks";
-import { brandReducer, modelNameReducer, tariffReducer } from "@/reducers";
 
 import {
   ActionType,
@@ -12,12 +11,14 @@ import {
   iFilterItem__brand,
   iFilterItem__modelName,
   iFilterItem__tariff,
-  iTarifModel,
 } from "@/types";
-import { setBrand, setModel, setTarif } from "@/utils/actions";
+import {
+  ActionCreator__setBrand,
+  ActionCreator__setModel,
+  ActionCreator__setTarif,
+} from "@/utils/actions";
 import axios from "axios";
 import React, { createContext, useEffect, useState } from "react";
-
 
 export const initialState__brand: iFilterItem__brand = {
   name: "Марка",
@@ -47,20 +48,9 @@ export const initialState: iFilter = {
 //   filterDispatch: React.Dispatch<ReducerAction<ActionCreator>> | null;
 // }>({ catalogue: null, filter: initialState, filterDispatch: null });
 
-const tarif: iTarifModel = {
-  "13": "Комфорт+",
-  "14": "Комфорт",
-  "22": "Комфорт2",
-  "26": "Комфорт3",
-};
-
 const SET_TARIF: ActionType = "SET_TARIF";
 const SET_MODEL: ActionType = "SET_MODEL";
 const SET_BRAND: ActionType = "SET_BRAND";
-
-
-
-interface iCatalogueRootState {}
 
 export const CatalogCtx = createContext<{
   model: {
@@ -69,9 +59,15 @@ export const CatalogCtx = createContext<{
     filter_brand: iFilterItem__brand;
   };
   controller: {
-    modelNameDispatch: React.Dispatch<ReducerAction<typeof setModel>> | null;
-    brandDispatch: React.Dispatch<ReducerAction<typeof setBrand>> | null;
-    tariffDispatch: React.Dispatch<ReducerAction<typeof setTarif>> | null;
+    modelNameDispatch: React.Dispatch<
+      ReducerAction<typeof ActionCreator__setModel>
+    > | null;
+    brandDispatch: React.Dispatch<
+      ReducerAction<typeof ActionCreator__setBrand>
+    > | null;
+    tariffDispatch: React.Dispatch<
+      ReducerAction<typeof ActionCreator__setTarif>
+    > | null;
   };
 }>({
   model: {
@@ -86,13 +82,11 @@ export const CatalogCtx = createContext<{
   },
 });
 
-
-
 export type ReducerAction<T extends MultiActionCreator> = ReturnType<T>;
 export type MultiActionCreator =
-  | typeof setTarif
-  | typeof setModel
-  | typeof setBrand;
+  | typeof ActionCreator__setTarif
+  | typeof ActionCreator__setModel
+  | typeof ActionCreator__setBrand;
 
 export type ModelNameState = typeof initialState__model;
 export type TarifState = typeof initialState__tariff;
@@ -108,14 +102,7 @@ const CatalogContainer = () => {
     brandDispatch,
     modelNameDispatch,
     tariffDispatch,
-  } = useReducers({
-    brandReducer,
-    modelNameReducer,
-    tariffReducer,
-    initialState__brand,
-    initialState__model,
-    initialState__tariff,
-  });
+  } = useReducers();
 
   useEffect(() => {
     getCatalogByPageId("1").then((response) => {
@@ -126,17 +113,17 @@ const CatalogContainer = () => {
   useEffect(() => {
     const { brandParamsString: bps } = myHandler({ brands: model_brand.value });
     console.log("param string changed", bps);
-    getCatalogByPageId("2", bps).then((response) => {
+    getCatalogByPageId("1", bps).then((response) => {
       setData(response);
+      console.log("brands updated");
     });
   }, [model_brand]);
 
   useEffect(() => {
-
     getCatalogByPageId("1").then((response) => {
       setData(response);
     });
-  }, [model_brand, model_tariff, model_modelName]);
+  }, [model_tariff, model_modelName]);
 
   return (
     <div>

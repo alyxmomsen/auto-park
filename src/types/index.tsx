@@ -1,4 +1,8 @@
-import { setBrand, setModel, setTarif } from "@/utils/actions";
+import {
+  ActionCreator__setBrand,
+  ActionCreator__setModel,
+  ActionCreator__setTarif,
+} from "@/utils/actions";
 
 export type tFilterDispatch = React.Dispatch<{
   type: ActionType;
@@ -7,11 +11,7 @@ export type tFilterDispatch = React.Dispatch<{
 
 export type ActionType = "SET_TARIF" | "SET_MODEL" | "SET_BRAND";
 
-export type Action<T> = {
-  type: ActionType;
-  payload: tTarif | tBrand | tVehicles;
-};
-
+/* ============================= */
 export type SetTarifAction = {
   type: "SET_TARIF";
   payload: tTarif;
@@ -24,6 +24,7 @@ export type SetBrandAction = {
   type: "SET_BRAND";
   payload: tBrand[];
 };
+/* ============================= */
 
 export interface iFilterItem__brand {
   name: "Марка";
@@ -144,4 +145,7 @@ export interface iCatalogueItem {
 }
 
 export type ReducerAction<T extends ActionCreator> = ReturnType<T>;
-export type ActionCreator = typeof setTarif | typeof setModel | typeof setBrand;
+export type ActionCreator =
+  | typeof ActionCreator__setTarif
+  | typeof ActionCreator__setModel
+  | typeof ActionCreator__setBrand;
