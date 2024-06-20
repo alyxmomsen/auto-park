@@ -26,22 +26,26 @@ export type SetBrandAction = {
   payload: tBrand;
 };
 
+export interface iFilterItem__brand {
+  name: "Марка";
+  code: "brand";
+  value: tBrand[];
+}
+export interface iFilterItem__modelName {
+  name: "Модель";
+  type: "model";
+  value: tVehicles[];
+}
+export interface iFilterItem__tariff {
+  name: "Тариф";
+  type: "tarif";
+  value: tTarif[];
+}
+
 export interface iFilter {
-  brands: {
-    name: "Марка";
-    code: "brand";
-    value: tBrand | null;
-  };
-  models: {
-    name: "Модель";
-    type: "model";
-    value: tVehicles | null;
-  };
-  tarif: {
-    name: "Тариф";
-    type: "tarif";
-    value: tTarif | null;
-  };
+  brands: iFilterItem__brand;
+  models: iFilterItem__modelName;
+  tariff: iFilterItem__tariff;
 }
 
 export interface iTarifModel {
@@ -54,11 +58,14 @@ export interface iTarifModel {
 export type tTarifCode = "13" | "14" | "22" | "26";
 export type tTarifName = ReturnType<typeof getTarifByCode>;
 
-export type tTarif =
-  | { "13": "Комфорт+" }
-  | { "14": "Комфорт" }
-  | { "22": "Комфорт2" }
-  | { "26": "Комфорт3" };
+export type tTarif13 = { code: "13"; name: "Комфорт+" };
+export type tTarif14 = { code: "14"; name: "Комфорт" };
+export type tTarif22 = { code: "22"; name: "Комфорт2" };
+export type tTarif26 = { code: "26"; name: "Комфорт3" };
+
+export type tTarif = tTarif13 | tTarif14 | tTarif22 | tTarif26;
+
+// export type iTariff 
 
 export type tBrand =
   | "BMW"

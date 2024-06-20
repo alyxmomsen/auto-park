@@ -1,7 +1,11 @@
 import React from "react";
 import styles from "./styles.module.css";
 import Link from "next/link";
-import { iCatalogueItem } from "@/types";
+import { iCatalogueItem, tTarif } from "@/types";
+
+export type CatalogItemProps = Omit<iCatalogueItem, "tarif"> & {
+  tarif?: tTarif;
+};
 
 const CatalogueItem = ({ data }: { data: iCatalogueItem }) => {
   return (
@@ -12,7 +16,7 @@ const CatalogueItem = ({ data }: { data: iCatalogueItem }) => {
         <div>{data.model}</div>
         <div>{data.number}</div>
         <div>{data.price}</div>
-        <div>{data.tarif}</div>
+        <div>{}</div>
         <img src={data.image} alt="alt text" />
       </div>
     </Link>

@@ -1,8 +1,8 @@
 import CatalogContainer from "@/containers/CatalogueContainer";
 import React from "react";
 
-const CatalogueComponent = () => {
+const CatalogueRoute = () => {
   return <CatalogContainer />;
 };
 
-export default CatalogueComponent;
+export default CatalogueRoute;
