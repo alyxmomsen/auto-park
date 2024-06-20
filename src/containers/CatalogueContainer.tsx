@@ -165,8 +165,6 @@ const CatalogContainer = () => {
 
   const [localstorage, setLocalStorage] = useState<{}>({});
 
-  
-
   const [model_modelName, modelNameDispatch] = useReducer<typeof modelNameReducer>(modelNameReducer, initialState__model);
   
   const [model_brand, brandDispatch] = useReducer<typeof brandReducer>(
