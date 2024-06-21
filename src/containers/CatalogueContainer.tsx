@@ -139,7 +139,7 @@ const CatalogContainer = () => {
   }, [model_modelName]);
 
   return (
-    <div>
+    <div className="catalogue">
       <CatalogCtx.Provider
         value={{
           model: {
