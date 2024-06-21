@@ -72,15 +72,15 @@ function Alarm() {
   );
 }
 
-export function BasicButtons() {
-  return (
-    <Stack spacing={2} direction="row">
-      <Button variant="text">Text</Button>
-      <Button variant="contained">Contained</Button>
-      <Button variant="outlined">Outlined</Button>
-    </Stack>
-  );
-}
+// function BasicButtons() {
+//   return (
+//     <Stack spacing={2} direction="row">
+//       <Button variant="text">Text</Button>
+//       <Button variant="contained">Contained</Button>
+//       <Button variant="outlined">Outlined</Button>
+//     </Stack>
+//   );
+// }
 
 const bull = (
   <Box
@@ -91,7 +91,7 @@ const bull = (
   </Box>
 );
 
-export function BasicCard({ data }: { data: MyVehicleCard }) {
+function BasicCard({ data }: { data: MyVehicleCard }) {
   return (
     <Card sx={{ minWidth: 275 }}>
       <CardContent>
