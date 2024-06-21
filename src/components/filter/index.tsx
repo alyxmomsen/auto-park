@@ -1,4 +1,8 @@
-import { CatalogCtx, FilterName, FilterNameCode } from "@/containers/CatalogueContainer";
+import {
+  CatalogCtx,
+  FilterName,
+  FilterNameCode,
+} from "@/containers/CatalogueContainer";
 import React, { useContext } from "react";
 
 import Box from "@mui/material/Box";
@@ -102,7 +106,9 @@ const Filter = () => {
         <MultipleSelectChip
           brandDispatch={catalogueCtx.controller.brandDispatch}
           label={catalogueCtx.model.filter_brand.name as FilterName}
-          filterNameCode={ catalogueCtx.model.filter_brand.code as FilterNameCode }
+          filterNameCode={
+            catalogueCtx.model.filter_brand.code as FilterNameCode
+          }
           list={Brand.map((elem, i) => ({ id: i.toString(), item: elem }))}
         />
       </div>
@@ -110,7 +116,9 @@ const Filter = () => {
         <MultipleSelectChip
           modelDispatch={catalogueCtx.controller.modelNameDispatch}
           label={catalogueCtx.model.filter_modelName.name as FilterName}
-          filterNameCode={ catalogueCtx.model.filter_modelName.type as FilterNameCode }
+          filterNameCode={
+            catalogueCtx.model.filter_modelName.type as FilterNameCode
+          }
           list={models.map((elem, i) => {
             return { id: i.toString(), item: elem };
           })}
@@ -120,7 +128,9 @@ const Filter = () => {
         <MultipleSelectChip
           tarifDispatch={catalogueCtx.controller.tariffDispatch}
           label={catalogueCtx.model.filter__tariff.name as FilterName}
-          filterNameCode={ catalogueCtx.model.filter__tariff.type as FilterNameCode }
+          filterNameCode={
+            catalogueCtx.model.filter__tariff.type as FilterNameCode
+          }
           list={tarifVariants.map((elem, i) => ({
             id: i.toString(),
             item: elem.name,

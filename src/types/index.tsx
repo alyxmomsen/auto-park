@@ -18,7 +18,7 @@ export type SetTarifAction = {
 };
 export type SetModelAction = {
   type: "SET_MODEL";
-  payload: tVehicles;
+  payload: tAllModels[];
 };
 export type SetBrandAction = {
   type: "SET_BRAND";
@@ -34,7 +34,7 @@ export interface iFilterItem__brand {
 export interface iFilterItem__modelName {
   name: "Модель";
   type: "model";
-  value: tVehicles[];
+  value: tAllModels[];
 }
 export interface iFilterItem__tariff {
   name: "Тариф";
@@ -93,6 +93,14 @@ export type tHyundai_models = "Sonata";
 export type tKia_models = "K5" | "Optima" | "Rio";
 export type tRenault_models = "Logan";
 export type tToyota_models = "Camry";
+
+export type tAllModels =
+  | tEXEED_models
+  | tGeely_models
+  | tHyundai_models
+  | tKia_models
+  | tRenault_models
+  | tToyota_models;
 
 export type tVehicles =
   | {

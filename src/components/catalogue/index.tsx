@@ -20,7 +20,9 @@ const Catalogue = ({ catalogue }: { catalogue: iCatalogue }) => {
     <div className="catalogue__root">
       <h1 className="catalogue__root__title">Catalogue</h1>
       <div className="catalogue__root pagination">
-        pagination <span className="pagination__item">{catalogue.page}</span>  of <span className="pagination__item">{catalogue.pages}</span> | per: <span className="pagination__item">{ catalogue.per_page }</span>
+        pagination <span className="pagination__item">{catalogue.page}</span> of{" "}
+        <span className="pagination__item">{catalogue.pages}</span> | per:{" "}
+        <span className="pagination__item">{catalogue.per_page}</span>
       </div>
       <div className="catalogue_root__body">
         {catalogue.list.map((elem) => (

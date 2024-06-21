@@ -2,6 +2,7 @@ import {
   SetBrandAction,
   SetModelAction,
   SetTarifAction,
+  tAllModels,
   tBrand,
   tTarif,
   tVehicles,
@@ -14,7 +15,7 @@ export const ActionCreator__setTarif = (tariff: tTarif[]): SetTarifAction => {
   };
 };
 
-export const ActionCreator__setModel = (model: tVehicles): SetModelAction => {
+export const ActionCreator__setModel = (model: tAllModels[]): SetModelAction => {
   return {
     type: "SET_MODEL",
     payload: model,

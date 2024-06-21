@@ -7,8 +7,22 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
-import { CatalogCtx, FilterName, FilterNameCode } from "@/containers/CatalogueContainer";
-import { iTarifModel, SetBrandAction, SetModelAction, SetTarifAction, TarifName, tBrand, tTarif } from "@/types";
+import {
+  CatalogCtx,
+  FilterName,
+  FilterNameCode,
+} from "@/containers/CatalogueContainer";
+import {
+  iTarifModel,
+  SetBrandAction,
+  SetModelAction,
+  SetTarifAction,
+  tAllModels,
+  TarifName,
+  tBrand,
+  tTarif,
+  tVehicles,
+} from "@/types";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -33,7 +47,7 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
 export default function MultipleSelectChip({
   brandDispatch,
   modelDispatch,
-  tarifDispatch ,
+  tarifDispatch,
   list = [],
   label,
   filterNameCode,
@@ -42,8 +56,8 @@ export default function MultipleSelectChip({
   modelDispatch?: React.Dispatch<SetModelAction> | null;
   tarifDispatch?: React.Dispatch<SetTarifAction> | null;
   list?: { id?: string; item: string }[];
-    label?: FilterName;
-    filterNameCode: FilterNameCode;
+  label?: FilterName;
+  filterNameCode: FilterNameCode;
 }) {
   const ctx = React.useContext(CatalogCtx);
 
@@ -59,23 +73,24 @@ export default function MultipleSelectChip({
         if (brandDispatch) {
           brandDispatch({ type: "SET_BRAND", payload: brands });
         }
-      break;
+        break;
       case "model":
-        // const models = personName as iTarifModel[];
-        // if (brandDispatch) {
-        //   brandDispatch({ type: "SET_BRAND", payload: brands });
-        // }
-      break;
-        
-      case "tarif":
-        
-        const tarifs = personName.map(elem => (tarifVariatorByName(elem as TarifName) as tTarif));
-        if (tarifDispatch) {
-          tarifDispatch({ type: "SET_TARIF", payload:tarifs });
+        console.log({ personName });
+        const models = personName as tAllModels[]
+        if (modelDispatch) {
+          modelDispatch({ type: "SET_MODEL", payload: models });
         }
-      break;
-    }
+        break;
 
+      case "tarif":
+        const tarifs = personName.map(
+          (elem) => tarifVariatorByName(elem as TarifName) as tTarif,
+        );
+        if (tarifDispatch) {
+          tarifDispatch({ type: "SET_TARIF", payload: tarifs });
+        }
+        break;
+    }
   }, [personName]);
 
   const handleChange = (event: SelectChangeEvent<typeof personName>) => {
@@ -123,17 +138,15 @@ export default function MultipleSelectChip({
   );
 }
 
-function tarifVariatorByName(name:TarifName):tTarif {
-  
+function tarifVariatorByName(name: TarifName): tTarif {
   switch (name) {
     case "\u041A\u043E\u043C\u0444\u043E\u0440\u0442+":
-      return { name: 'Комфорт+', code: '13' };
+      return { name: "Комфорт+", code: "13" };
     case "\u041A\u043E\u043C\u0444\u043E\u0440\u0442":
-      return { name: 'Комфорт', code: '14' };
+      return { name: "Комфорт", code: "14" };
     case "\u041A\u043E\u043C\u0444\u043E\u0440\u04422":
-      return { name: 'Комфорт2', code: '22' };
+      return { name: "Комфорт2", code: "22" };
     case "\u041A\u043E\u043C\u0444\u043E\u0440\u04423":
-      return { name: 'Комфорт3', code: '26' };
+      return { name: "Комфорт3", code: "26" };
   }
-
 }

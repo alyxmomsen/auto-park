@@ -9,7 +9,10 @@ export type CatalogItemProps = Omit<iCatalogueItem, "tarif"> & {
 
 const CatalogueItem = ({ data }: { data: iCatalogueItem }) => {
   return (
-    <Link className="catalogue__root__body__item" href={"/catalogue-item/" + data.id}>
+    <Link
+      className="catalogue__root__body__item"
+      href={"/catalogue-item/" + data.id}
+    >
       <div className={styles.wrapper}>
         <img src={data.image} alt="alt text" />
         <div>id: {data.id}</div>

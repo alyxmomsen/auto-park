@@ -17,7 +17,7 @@ export const tariffReducer = (
     case "SET_TARIF":
       return {
         ...state,
-        value: [/* ...state.value,  */...action.payload],
+        value: [/* ...state.value,  */ ...action.payload],
       };
     default:
       return state;
@@ -32,7 +32,7 @@ export const modelNameReducer = (
     case "SET_MODEL":
       return {
         ...state,
-        value: [...state.value, action.payload],
+        value: [...action.payload],
       };
     default:
       return state;

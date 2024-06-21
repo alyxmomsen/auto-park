@@ -24,27 +24,26 @@
   border: 1px solid black;
   max-width: 1200px;
   min-width: 300px;
-  margin: 0 auto ;
+  margin: 0 auto;
 }
 
 .catalogue__root {
-  border:  1px solid;
+  border: 1px solid;
   padding: 9px;
-
 }
 
 .catalogue_root__body {
   border: 1px solid red;
   display: flex;
   flex-wrap: wrap;
-  gap:9px ;
-  padding:9px 0;
+  gap: 9px;
+  padding: 9px 0;
   justify-content: space-between;
 }
 
 .catalogue__root__body__item {
-  flex-grow:0.1 ;
-  flex-shrink:0 ;
+  flex-grow: 0.1;
+  flex-shrink: 0;
   flex-basis: 200px;
   min-height: 300px;
   border: 2px solid green;
@@ -52,7 +51,7 @@
   flex-direction: column;
   gap: 9px;
   padding: 9px;
-  transition: all .2s ease-out;
+  transition: all 0.2s ease-out;
 }
 
 .catalogue__root__body__item:hover {

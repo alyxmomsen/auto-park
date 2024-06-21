@@ -96,6 +96,7 @@ export type BrandState = typeof initialState__brand;
 
 const CatalogContainer = () => {
   const [data, setData] = useState<iCatalogue | null>(null);
+  const [propSting, setPropString] = useState("");
 
   const {
     model_brand,
@@ -113,28 +114,35 @@ const CatalogContainer = () => {
   }, []);
 
   useEffect(() => {
-    const { brandParamsString: bps } = myHandler({ brands: model_brand.value });
-    console.log("param string changed", bps);
-    getCatalogByPageId("1", bps).then((response) => {
+    getCatalogByPageId("1", propSting).then((response) => {
       setData(response);
       console.log("brands updated");
+    });
+
+    console.log({ propSting });
+  }, [propSting]);
+
+  useEffect(() => {
+    const { brandParamsString: bps } = myHandler({ brands: model_brand.value });
+    console.log("param string changed", bps);
+
+    setPropString((current) => {
+      return current.replaceAll(/&brand\[\]=[\w]+/gi, "") + bps;
     });
   }, [model_brand]);
 
   useEffect(() => {
-    console.log('tarif changed' , model_tariff);
     const { tariffParamsString } = myHandler({ tariffes: model_tariff.value });
-    console.log({tariffParamsString});
-    getCatalogByPageId("1" , tariffParamsString).then((response) => {
-      setData(response);
+    setPropString((current) => {
+      return current.replaceAll(/&tarif\[\]=[\w]+/gi, "") + tariffParamsString;
     });
   }, [model_tariff]);
 
   useEffect(() => {
-    console.log('model changed' , model_modelName);
-    
-    getCatalogByPageId("1").then((response) => {
-      setData(response);
+    console.log("model changed", model_modelName);
+    const { modelParamsString } = myHandler({ models: model_modelName.value });
+    setPropString((current) => {
+      return current.replaceAll(/&model\[\]=[\w]+/gi, "") + modelParamsString;
     });
   }, [model_modelName]);
 
