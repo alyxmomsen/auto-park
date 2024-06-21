@@ -1,6 +1,11 @@
 import React from "react";
 
-const layout = ({ children }: { children: React.ReactNode }) => {
+interface LayoutProps {
+  children: React.ReactNode;
+  filter: string; // или другой необходимый тип
+}
+
+const layout = ({ children , filter }: /* { children: React.ReactNodes } */LayoutProps) => {
   return <div>{children}</div>;
 };
 

@@ -21,18 +21,18 @@ import axios from "axios";
 import React, { createContext, useEffect, useState } from "react";
 
 
-const localstorageCtx_Str = localStorage.getItem('ctx');
-const cashedCTX = localstorageCtx_Str ? JSON.parse(localstorageCtx_Str) as tCatalogContext : null;
+// const localstorageCtx_Str = localStorage.getItem('ctx');
+// const cashedCTX = localstorageCtx_Str ? JSON.parse(localstorageCtx_Str) as tCatalogContext : null;
 
 
-console.log({cashedCTX} );
+// console.log({cashedCTX} );
 
 export type FilterNameCode = "brand" | "model" | "tarif";
 export type FilterName = "Марка" | "Модель" | "Тариф";
 export const initialState__brand: iFilterItem__brand = {
   name: "Марка",
   code: "brand",
-  value:(cashedCTX && cashedCTX.model && cashedCTX.model.filter_brand.value) || [],
+  value:/* (cashedCTX && cashedCTX.model && cashedCTX.model.filter_brand.value) ||  */[],
 };
 export const initialState__model: iFilterItem__modelName = {
   name: "Модель",
