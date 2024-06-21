@@ -2,18 +2,21 @@ import React from "react";
 import styles from "./styles.module.css";
 import Link from "next/link";
 import { iCatalogueItem, tTarif } from "@/types";
+import { BasicCard__2 } from "../catalogue";
 
 export type CatalogItemProps = Omit<iCatalogueItem, "tarif"> & {
   tarif?: tTarif;
 };
 
 const CatalogueItem = ({ data }: { data: iCatalogueItem }) => {
+  
   return (
     <Link
       className="catalogue__root__body__item"
       href={"/catalogue-item/" + data.id}
     >
-      <div className={styles.wrapper}>
+      <BasicCard__2 data={data} />
+      {/* <div className={styles.wrapper}>
         <img src={data.image} alt="alt text" />
         <div>id: {data.id}</div>
         <div>brand: {data.brand}</div>
@@ -21,7 +24,7 @@ const CatalogueItem = ({ data }: { data: iCatalogueItem }) => {
         <div>number: {data.number}</div>
         <div>price: {data.price}</div>
         <div>tariff: {}</div>
-      </div>
+      </div> */}
     </Link>
   );
 };

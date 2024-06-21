@@ -76,7 +76,7 @@ export default function MultipleSelectChip({
         break;
       case "model":
         console.log({ personName });
-        const models = personName as tAllModels[]
+        const models = personName as tAllModels[];
         if (modelDispatch) {
           modelDispatch({ type: "SET_MODEL", payload: models });
         }

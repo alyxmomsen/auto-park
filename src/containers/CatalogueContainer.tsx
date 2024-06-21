@@ -59,6 +59,8 @@ export const CatalogCtx = createContext<{
     filter__tariff: iFilterItem__tariff;
     filter_modelName: iFilterItem__modelName;
     filter_brand: iFilterItem__brand;
+    catalogData: iCatalogue | null;
+    propSting: string;
   };
   controller: {
     modelNameDispatch: React.Dispatch<
@@ -70,17 +72,21 @@ export const CatalogCtx = createContext<{
     tariffDispatch: React.Dispatch<
       ReducerAction<typeof ActionCreator__setTarif>
     > | null;
+    setData:React.Dispatch<React.SetStateAction<iCatalogue | null>>|null
   };
 }>({
   model: {
     filter__tariff: initialState__tariff,
     filter_modelName: initialState__model,
     filter_brand: initialState__brand,
+    catalogData: null,
+    propSting:'',
   },
   controller: {
     modelNameDispatch: null,
     brandDispatch: null,
     tariffDispatch: null,
+    setData:null ,
   },
 });
 
@@ -154,11 +160,14 @@ const CatalogContainer = () => {
             filter__tariff: model_tariff,
             filter_brand: model_brand,
             filter_modelName: model_modelName,
+            catalogData: data,
+            propSting ,
           },
           controller: {
             brandDispatch,
             modelNameDispatch,
             tariffDispatch,
+            setData ,
           },
         }}
       >
@@ -172,7 +181,7 @@ const CatalogContainer = () => {
 
 export default CatalogContainer;
 
-async function getCatalogByPageId(pageId: string, params: string = "") {
+export async function getCatalogByPageId(pageId: string, params: string = "") {
   const baseURL_catalog_cars =
     "https://test.taxivoshod.ru/api/test/?w=catalog-cars";
 

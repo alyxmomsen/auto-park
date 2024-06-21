@@ -15,7 +15,9 @@ export const ActionCreator__setTarif = (tariff: tTarif[]): SetTarifAction => {
   };
 };
 
-export const ActionCreator__setModel = (model: tAllModels[]): SetModelAction => {
+export const ActionCreator__setModel = (
+  model: tAllModels[],
+): SetModelAction => {
   return {
     type: "SET_MODEL",
     payload: model,

@@ -2,6 +2,7 @@ import {
   CatalogCtx,
   FilterName,
   FilterNameCode,
+  getCatalogByPageId,
 } from "@/containers/CatalogueContainer";
 import React, { useContext } from "react";
 
@@ -10,7 +11,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { colors } from "@mui/material";
+import { colors, Pagination, Stack, Typography } from "@mui/material";
 import { tBrand, tVehicles } from "@/types";
 import MultipleSelectChip from "./select-element";
 
@@ -101,6 +102,7 @@ const Filter = () => {
     );
 
   return (
+    <>
     <div className="product_filter">
       <div className="product_filter__item product_filter__item--wrapper">
         <MultipleSelectChip
@@ -137,7 +139,9 @@ const Filter = () => {
           }))}
         />
       </div>
-    </div>
+      </div>
+      <PaginationControlled size={Infinity} />
+    </>
   );
 };
 
@@ -177,5 +181,36 @@ function BasicSelect({ list, label }: { list: string[]; label: string }) {
         </Select>
       </FormControl>
     </Box>
+  );
+}
+
+
+export function PaginationControlled({ size }:{size:number}) {
+  
+  const ctx = useContext(CatalogCtx)
+
+  const [page, setPage] = React.useState(1);
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+
+    getCatalogByPageId(value.toLocaleString() , ctx.model.propSting).then(response => {
+      const data = response;
+      
+      if (data && ctx.controller.setData) {
+        
+        ctx.controller.setData(data);
+      }
+    });
+
+    setPage(value);
+  };
+
+  return (
+    <Stack spacing={2}>
+      {/* <Typography>Page: {page}</Typography> */}
+      {
+        ctx.model.catalogData ? <Pagination count={ctx.model.catalogData.pages} page={page} onChange={handleChange} /> : null
+      }
+      
+    </Stack>
   );
 }
