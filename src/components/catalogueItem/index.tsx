@@ -1,17 +1,25 @@
-import React from "react";
+import React, { useContext } from "react";
 import styles from "./styles.module.css";
 import Link from "next/link";
 import { iCatalogueItem, tTarif } from "@/types";
 import { BasicCard__2 } from "../catalogue";
+import { CatalogCtx } from "@/containers/CatalogueContainer";
 
 export type CatalogItemProps = Omit<iCatalogueItem, "tarif"> & {
   tarif?: tTarif;
 };
 
 const CatalogueItem = ({ data }: { data: iCatalogueItem }) => {
+
+  const ctx = useContext(CatalogCtx);
+
+  ctx.model.filter__tariff
   
   return (
     <Link
+      onClick={() => {
+        localStorage.setItem('ctx' , JSON.stringify(ctx));
+      }}
       className="catalogue__root__body__item"
       href={"/catalogue-item/" + data.id}
     >

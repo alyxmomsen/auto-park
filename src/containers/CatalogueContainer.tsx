@@ -20,12 +20,19 @@ import {
 import axios from "axios";
 import React, { createContext, useEffect, useState } from "react";
 
+
+const localstorageCtx_Str = localStorage.getItem('ctx');
+const cashedCTX = localstorageCtx_Str ? JSON.parse(localstorageCtx_Str) as tCatalogContext : null;
+
+
+console.log({cashedCTX} );
+
 export type FilterNameCode = "brand" | "model" | "tarif";
 export type FilterName = "Марка" | "Модель" | "Тариф";
 export const initialState__brand: iFilterItem__brand = {
   name: "Марка",
   code: "brand",
-  value: [],
+  value:(cashedCTX && cashedCTX.model && cashedCTX.model.filter_brand.value) || [],
 };
 export const initialState__model: iFilterItem__modelName = {
   name: "Модель",
@@ -90,6 +97,22 @@ export const CatalogCtx = createContext<{
   },
 });
 
+export type tCatalogContext = {
+    model: {
+        filter__tariff: iFilterItem__tariff;
+        filter_modelName: iFilterItem__modelName;
+        filter_brand: iFilterItem__brand;
+        catalogData: iCatalogue | null;
+        propSting: string;
+    };
+    controller: {
+        modelNameDispatch: React.Dispatch<ReducerAction<typeof ActionCreator__setModel>> | null;
+        brandDispatch: React.Dispatch<ReducerAction<typeof ActionCreator__setBrand>> | null;
+        tariffDispatch: React.Dispatch<ReducerAction<typeof ActionCreator__setTarif>> | null;
+        setData: React.Dispatch<React.SetStateAction<iCatalogue | null>> | null;
+    };
+}
+
 export type ReducerAction<T extends MultiActionCreator> = ReturnType<T>;
 export type MultiActionCreator =
   | typeof ActionCreator__setTarif
@@ -114,7 +137,15 @@ const CatalogContainer = () => {
   } = useReducers();
 
   useEffect(() => {
-    getCatalogByPageId("1").then((response) => {
+
+    const localstorageCtx_Str = localStorage.getItem('ctx');
+    const cashedCTX = localstorageCtx_Str ? JSON.parse(localstorageCtx_Str) as tCatalogContext : null;
+
+    const propstr = cashedCTX?.model.propSting;
+
+    console.log({cashedCTX} );
+
+    getCatalogByPageId("1" , propstr || '').then((response) => {
       setData(response);
     });
   }, []);
@@ -151,6 +182,9 @@ const CatalogContainer = () => {
       return current.replaceAll(/&model\[\]=[\w]+/gi, "") + modelParamsString;
     });
   }, [model_modelName]);
+
+
+  
 
   return (
     <div className="catalogue">
