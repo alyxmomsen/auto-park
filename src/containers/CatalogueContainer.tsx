@@ -138,14 +138,12 @@ const CatalogContainer = () => {
 
   useEffect(() => {
 
-    const localstorageCtx_Str = localStorage.getItem('ctx');
-    const cashedCTX = localstorageCtx_Str ? JSON.parse(localstorageCtx_Str) as tCatalogContext : null;
+    // const localstorageCtx_Str = localStorage.getItem('ctx');
+    // const cashedCTX = localstorageCtx_Str ? JSON.parse(localstorageCtx_Str) as tCatalogContext : null;
+    // const propstr = cashedCTX?.model.propSting;
+    // console.log({cashedCTX} );
 
-    const propstr = cashedCTX?.model.propSting;
-
-    console.log({cashedCTX} );
-
-    getCatalogByPageId("1" , propstr || '').then((response) => {
+    getCatalogByPageId("1" /* , (propstr || '') */).then((response) => {
       setData(response);
     });
   }, []);
